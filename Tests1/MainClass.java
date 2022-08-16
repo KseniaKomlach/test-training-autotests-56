@@ -3,7 +3,8 @@ package Tests1;
 import org.junit.Test;
 
 public class MainClass {
-   public int getLocalNumber(){
-      return 14;
+   private String class_string = "Hello, world";
+   public String getClassString(){
+      return this.class_string;
    }
 }

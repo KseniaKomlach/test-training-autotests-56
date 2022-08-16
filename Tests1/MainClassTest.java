@@ -5,15 +5,15 @@ import org.junit.Test;
 
 public class MainClassTest extends MainClass{
     @Test
-    public void testGetLocalNumber(){
+    public void testGetClassString(){
 
-        int number = getLocalNumber();
-        boolean result = number==14;
+        String class_string = getClassString();
+        boolean result = (class_string.contains("hello")||class_string.contains("Hello"));
 
         if (result)
-            testMessage("Test passed, method getLocalNumber returns 14!");
+            testMessage("Test passed!");
         else
-            Assert.fail("Test failed, method getLocalNumber returns wrong number!");
+            Assert.fail("Test failed, the string does not contain 'hello' or 'Hello'!");
     }
     private void testMessage(String message){
         System.out.println(message);
