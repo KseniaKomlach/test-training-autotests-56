@@ -5,15 +5,15 @@ import org.junit.Test;
 
 public class MainClassTest extends MainClass{
     @Test
-    public void testGetLocalNumber(){
+    public void testGetClassNumber(){
 
-        int number = getLocalNumber();
-        boolean result = number==14;
+        int number = getClassNumber();
+        boolean result = number>45;
 
         if (result)
-            testMessage("Method getLocalNumber returns 14!");
+            testMessage("Test passed, method getClassNumber returns a number greater than 45 :) ");
         else
-            testMessage("Test failed, method getLocalNumber returns wrong number!");
+            Assert.fail("Test failed, method getClassNumber does not return a number greater than 45 :(");
     }
     private void testMessage(String message){
         System.out.println(message);
