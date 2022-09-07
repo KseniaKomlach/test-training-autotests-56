@@ -2,7 +2,6 @@ package Tests2;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.AndroidElement;
 import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -11,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
-import java.util.concurrent.TimeUnit;
 
 public class FirstTest {
 
@@ -37,11 +35,37 @@ public class FirstTest {
     }
 
     @Test
-    public void testNameOfSearchField(){
+    public void cancelSearch(){
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='Search Wikipedia']"),
+                "Cannot find 'Search Wikipedia'"
+        );
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search field",
+                "Cats"
+        );
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='0']"),
+                "Cannot find any articles"
+        );
+        waitForElementPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='1']"),
+                "Find only one article"
+        );
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find close button"
+        );
         assertElementHasText(
-                By.xpath("//android.widget.TextView[@text='Search Wikipedia']"),
-                "Search Wikipedia",
-                "Actual text of element not equal to 'Search Wikipedia'"
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search…",
+                "Search field is not empty"
+        );
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='0']"),
+                "Articles are still displayed",
+                5
         );
     }
 
@@ -51,7 +75,13 @@ public class FirstTest {
     }
 
 
-
+    private Boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds){
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
+        wait.withMessage(error_message + "\n");
+        return wait.until(
+                ExpectedConditions.invisibilityOfElementLocated(by)
+        );
+    }
     private void assertElementHasText(By by, String expected_text, String error_message){
         WebElement element = waitForElementPresent(by, "Cannot find element "+by);
         String actual_text = element.getAttribute("text");
