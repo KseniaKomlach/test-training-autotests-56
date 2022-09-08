@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.util.List;
 
 public class FirstTest {
 
@@ -21,15 +22,14 @@ public class FirstTest {
 
         capabilities.setCapability("systemPort", 8206);
         capabilities.setCapability("clearSystemFiles", "true");
-        capabilities.setCapability("appium:deviceName", "Redmi Note 8 Pro");
+        capabilities.setCapability("appium:deviceName", "Pixel 4");
         capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("appium:platformVersion", "10");
-        capabilities.setCapability("appPackage", "ru.vipnet.connect");
+        capabilities.setCapability("appium:platformVersion", "13");
         capabilities.setCapability("appPackage", "org.wikipedia");
         capabilities.setCapability("appActivity", "org.wikipedia.main.MainActivity");
         capabilities.setCapability("noReset", "true");
         capabilities.setCapability("automationName", "UiAutomator2");
-        capabilities.setCapability("appium:udid", "y5njdmemqcivuorw");
+        capabilities.setCapability("appium:udid", "9A231FFAZ004BG");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
     }
@@ -42,32 +42,21 @@ public class FirstTest {
         );
         waitForElementPresentAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
-                "Cannot find search field",
-                "Cats"
+                "Cannot find search field and send keys",
+                "Kingdom"
         );
         waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='0']"),
-                "Cannot find any articles"
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Cannot find title"
         );
-        waitForElementPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='1']"),
-                "Find only one article"
-        );
-        waitForElementPresentAndClick(
-                By.id("org.wikipedia:id/search_close_btn"),
-                "Cannot find close button"
-        );
-        assertElementHasText(
-                By.id("org.wikipedia:id/search_src_text"),
-                "Search…",
-                "Search field is not empty"
-        );
-        waitForElementNotPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@index='0']"),
-                "Articles are still displayed",
-                5
-        );
+        List titles = driver.findElementsByXPath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
+        titles.stream().forEach(
+                (element) -> {
+                    WebElement title = (WebElement) element;
+                    Assert.assertTrue("At least one title does not contain 'Kingdom'", title.getAttribute("text").contains("Kingdom"));
+                });
     }
+    //org.wikipedia:id/page_list_item_description
 
     @After
     public void tearDown() {
