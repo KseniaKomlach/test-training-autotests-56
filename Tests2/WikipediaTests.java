@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URL;
 import java.util.List;
 
-public class FirstTest {
+public class WikipediaTests {
 
     private AppiumDriver driver;
 
@@ -35,7 +35,7 @@ public class FirstTest {
     }
 
     @Test
-    public void cancelSearch(){
+    public void CheckResultOfSearch(){
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='Search Wikipedia']"),
                 "Cannot find 'Search Wikipedia'"
@@ -49,12 +49,10 @@ public class FirstTest {
                 By.id("org.wikipedia:id/page_list_item_title"),
                 "Cannot find title"
         );
-        List titles = driver.findElementsByXPath("//*[@resource-id='org.wikipedia:id/page_list_item_title']");
-        titles.stream().forEach(
-                (element) -> {
-                    WebElement title = (WebElement) element;
-                    Assert.assertTrue("At least one title does not contain 'Kingdom'", title.getAttribute("text").contains("Kingdom"));
-                });
+        checkAllElementsByXpathContains(
+                "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
+                "Kingdom"
+        );
     }
     //org.wikipedia:id/page_list_item_description
 
@@ -109,5 +107,13 @@ public class FirstTest {
     }
     private void waitForElementPresentAndSendKeys(By by, String error_message, String keys) {
         waitForElementPresentAndSendKeys(by, error_message, keys, 5);
+    }
+    private void checkAllElementsByXpathContains (String xpath, String word){
+        List titles = driver.findElementsByXPath(xpath);
+        titles.stream().forEach(
+                (element) -> {
+                    WebElement title = (WebElement) element;
+                    Assert.assertTrue("At least one title does not contain '" + word +"'", title.getAttribute("text").contains(word));
+                });
     }
 }
