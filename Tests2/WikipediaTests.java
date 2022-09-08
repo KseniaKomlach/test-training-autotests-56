@@ -35,7 +35,7 @@ public class WikipediaTests {
     }
 
     @Test
-    public void CheckResultOfSearch(){
+    public void CancelSearch(){
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='Search Wikipedia']"),
                 "Cannot find 'Search Wikipedia'"
@@ -49,10 +49,19 @@ public class WikipediaTests {
                 By.id("org.wikipedia:id/page_list_item_title"),
                 "Cannot find title"
         );
-        checkAllElementsByXpathContains(
-                "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
-                "Kingdom"
+        List resultsOfSearch = driver.findElementsByXPath("//*[@resource-id='org.wikipedia:id/page_list_item_container']");
+        Assert.assertTrue("No results or only one", resultsOfSearch.size()>1);
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/search_close_btn"),
+                "Cannot find close button"
         );
+        assertElementHasText(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Search…",
+                "Search field is not empty"
+        );
+        List resultsAfterClear = driver.findElementsByXPath("//*[@resource-id='org.wikipedia:id/page_list_item_container']");
+        Assert.assertTrue("Results are still displayed", resultsAfterClear.size()==0);
     }
     //org.wikipedia:id/page_list_item_description
 
