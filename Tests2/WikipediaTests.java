@@ -383,6 +383,32 @@ public class WikipediaTests {
         );
     }
 
+    @Test
+    public void assertTitleOfArticlePresent(){
+        String search_line = "Kingdom";
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='Search Wikipedia']"),
+                "Cannot find 'Search Wikipedia'"
+        );
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Cannot find search field and send keys",
+                search_line
+        );
+        waitForElementPresent(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Cannot find title"
+        );
+        waitForElementPresentAndClick(
+                By.id("org.wikipedia:id/page_list_item_title"),
+                "Cannot find title"
+        );
+        assertElementPresent(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Title of article not present now."
+        );
+    }
+
     @After
     public void tearDown() {
         driver.quit();
@@ -528,5 +554,12 @@ public class WikipediaTests {
     private String waitForElementAndGetAttribute(By by, String attribute, String error_message, long timeoutInSeconds){
         WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
+    }
+    private void assertElementPresent(By by, String error_message){
+        int amount_of_elements = getAmountOfElements(by);
+        if (amount_of_elements==0){
+            String default_message = "An element '" + by.toString() + "' not present";
+            throw new AssertionError(default_message + ". " + error_message);
+        }
     }
 }
