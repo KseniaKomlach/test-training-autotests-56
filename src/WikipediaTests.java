@@ -1,45 +1,26 @@
-package Tests2;
+package src;
 
-import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.touch.WaitOptions;
 import io.appium.java_client.touch.offset.PointOption;
-import org.junit.*;
-import org.openqa.selenium.*;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.ScreenOrientation;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeTest;
+import src.lib.CoreTestCase;
 
-import java.net.URL;
-import java.sql.Time;
 import java.time.Duration;
 import java.util.List;
 
-public class WikipediaTests {
-
-    private AppiumDriver driver;
-
-    @Before
-    public void setUp() throws Exception {
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        capabilities.setCapability("systemPort", 8206);
-        capabilities.setCapability("clearSystemFiles", "true");
-        capabilities.setCapability("appium:deviceName", "Pixel 4");
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("appium:platformVersion", "13");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", "org.wikipedia.main.MainActivity");
-        capabilities.setCapability("noReset", "false");
-        capabilities.setCapability("automationName", "UiAutomator2");
-        capabilities.setCapability("appium:udid", "9A231FFAZ004BG");
-
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
-    }
+public class WikipediaTests extends CoreTestCase {
 
     @Test
-    public void CancelSearch() {
+    public void testCancelSearch() {
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='Search Wikipedia']"),
                 "Cannot find 'Search Wikipedia'"
@@ -66,7 +47,7 @@ public class WikipediaTests {
     }
 
     @Test
-    public void saveFirstArticleToMyList() {
+    public void testSaveFirstArticleToMyList() {
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='Search Wikipedia']"),
                 "Cannot find 'Search Wikipedia'"
@@ -258,9 +239,8 @@ public class WikipediaTests {
 
     }
 
-    //Ex5
     @Test
-    public void SavingTwoArticles(){
+    public void testSavingTwoArticles(){
         String search_line = "Kingdom";
         String search_line_second = "Elizaveta";
         String name_of_folder = "Folder for test Ex5";
@@ -384,7 +364,7 @@ public class WikipediaTests {
     }
 
     @Test
-    public void assertTitleOfArticlePresent(){
+    public void testAssertTitleOfArticlePresent(){
         String search_line = "Kingdom";
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='Search Wikipedia']"),
@@ -409,10 +389,7 @@ public class WikipediaTests {
         );
     }
 
-    @After
-    public void tearDown() {
-        driver.quit();
-    }
+
 
 
     private Boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
