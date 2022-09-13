@@ -14,6 +14,7 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_INPUT = "org.wikipedia:id/search_src_text",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{SUBSTRING}\"]",
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{DESCRIPTION}\"]/preceding-sibling::*[@text=\"{TITLE}\"]",
             EMPTY_RESULTS_LABEL = "org.wikipedia:id/search_empty_view",
             TITLE_OF_SEARCH_RESULT = "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
             SEARCH_RESULT_ELEMENT = "//android.widget.ListView[@resource-id='org.wikipedia:id/search_results_list']/android.widget.LinearLayout[@resource-id='org.wikipedia:id/page_list_item_container']";
@@ -25,6 +26,9 @@ public class SearchPageObject extends MainPageObject{
 
     private static String getResultSearchElement(String substring){
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
+    }
+    private static String getResultSearchElementByTitleAndDescription(String title, String description){
+        return SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL.replace("{DESCRIPTION}", description).replace("{TITLE}", title);
     }
 
     public void initSearchInput(){
@@ -76,5 +80,17 @@ public class SearchPageObject extends MainPageObject{
                     WebElement title = (WebElement) element;
                     Assert.assertTrue("At least one title does not contain '" + word + "'", title.getAttribute("text").contains(word));
                 });
+    }
+    public void waitForElementByTitleAndDescription(String title, String description){
+        String article_xpath = getResultSearchElementByTitleAndDescription(title, description);
+        this.waitForElementPresent(
+                By.xpath(article_xpath),
+                "Cannot find article with title '" + title + "' and description '" + description +"'",
+                15
+        );
+    }
+    public void findForElementByTitleAndDescription(String title, String description){
+        String article_xpath = getResultSearchElementByTitleAndDescription(title, description);
+        driver.findElementByXPath(article_xpath);
     }
 }

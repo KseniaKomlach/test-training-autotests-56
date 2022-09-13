@@ -1,6 +1,7 @@
 package src.tests;
 
 import org.junit.Test;
+import org.openqa.selenium.By;
 import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MainPageObject;
@@ -50,5 +51,16 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject.typeSearchLine("Kingdom");
         SearchPageObject.waitForSearchResult("Wikimedia disambiguation page");
         SearchPageObject.checkAllResultsOfSearchContains("Kingdom");
+    }
+    //Ex9
+    @Test
+    public void testFind3ArticlesByTitleAndDescription(){
+        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+
+        SearchPageObject.initSearchInput();
+        SearchPageObject.typeSearchLine("Kingdom");
+        SearchPageObject.waitForElementByTitleAndDescription("Kingdom", "Wikimedia disambiguation page");
+        SearchPageObject.waitForElementByTitleAndDescription("Kingdom of Great Britain", "Constitutional monarchy in Western Europe (1707–1800)");
+        SearchPageObject.waitForElementByTitleAndDescription("Kingdom Hearts", "Video game series");
     }
 }
