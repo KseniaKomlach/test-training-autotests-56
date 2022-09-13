@@ -12,10 +12,11 @@ public class ArticlePageObject extends MainPageObject{
             FOOTER_ELEMENT = "org.wikipedia:id/page_license_text",
             OPTIONS_BUTTON = "//android.widget.ImageView[@content-desc='More options']",
             OPTIONS_ADD_TO_LIST_BUTTON = "//android.widget.TextView[@text='Add to reading list']",
-            ADD_TO_LIST_OVERLAY = "org.wikipedia:id/onboarding_button", //or org.wikipedia:id/create_button
+            ADD_TO_NEW_LIST_OVERLAY = "org.wikipedia:id/onboarding_button",
             LIST_NAME_INPUT = "org.wikipedia:id/text_input",
             LIST_OK_BUTTON = "//android.widget.Button[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']";
+            CLOSE_ARTICLE_BUTTON = "//android.widget.ImageButton[@content-desc='Navigate up']",
+            FOLDER_BY_NAME_TPL = "//android.widget.TextView[@text=\"{FOLDER_NAME}\"]";
 
     public ArticlePageObject(AppiumDriver driver){
         super(driver);
@@ -23,6 +24,9 @@ public class ArticlePageObject extends MainPageObject{
 
     public WebElement waitForTitleElement(){
         return this.waitForElementPresent(By.id(TITLE), "Cannot find article title on page");
+    }
+    private static String getFolderXpathByName(String name_of_folder){
+        return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
     }
     public String getArticleTitle(){
         WebElement title_element = waitForTitleElement();
@@ -34,7 +38,7 @@ public class ArticlePageObject extends MainPageObject{
     public void swipeQuickToFooter(){
         this.swipeUpToFindElementQuick(By.id(FOOTER_ELEMENT), "Cannot find the end of article", 20);
     }
-    public void addArticleToMyList(String name_of_folder){
+    public void addArticleToMyNewList(String name_of_folder){
         this.waitForElementPresentAndClick(
                 By.xpath(OPTIONS_BUTTON),
                 "Cannot find button to open article options"
@@ -44,7 +48,7 @@ public class ArticlePageObject extends MainPageObject{
                 "Cannot find option to add article to reading list"
         );
         this.waitForElementPresentAndClick(
-                By.id(ADD_TO_LIST_OVERLAY),
+                By.id(ADD_TO_NEW_LIST_OVERLAY),
                 "Cannot find 'Got it' button"
         );
         this.waitForElementPresentAndClear(
@@ -61,6 +65,24 @@ public class ArticlePageObject extends MainPageObject{
                 "Cannot press OK button"
         );
     }
+
+    public void addArticleToMyList(String name_of_folder){
+        this.waitForElementPresentAndClick(
+                By.xpath(OPTIONS_BUTTON),
+                "Cannot find button to open article options"
+        );
+        this.waitForElementPresentAndClick(
+                By.xpath(OPTIONS_ADD_TO_LIST_BUTTON),
+                "Cannot find option to add article to reading list"
+        );
+        String folder_xpath = getFolderXpathByName(name_of_folder);
+        this.waitForElementPresentAndClick(
+                By.xpath(folder_xpath),
+                "Cannot find and click folder with name " + name_of_folder,
+                10
+        );
+    }
+
     public void closeArticle(){
         this.waitForElementPresentAndClick(
                 By.xpath(CLOSE_ARTICLE_BUTTON),

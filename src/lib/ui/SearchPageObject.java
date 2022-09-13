@@ -1,7 +1,11 @@
 package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
 
 public class SearchPageObject extends MainPageObject{
 
@@ -9,7 +13,11 @@ public class SearchPageObject extends MainPageObject{
             SEARCH_INIT_ELEMENT = "//*[@text='Search Wikipedia']",
             SEARCH_INPUT = "org.wikipedia:id/search_src_text",
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{SUBSTRING}\"]";
+            SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{SUBSTRING}\"]",
+            EMPTY_RESULTS_LABEL = "org.wikipedia:id/search_empty_view",
+            TITLE_OF_SEARCH_RESULT = "//*[@resource-id='org.wikipedia:id/page_list_item_title']",
+            SEARCH_RESULT_ELEMENT = "//android.widget.ListView[@resource-id='org.wikipedia:id/search_results_list']/android.widget.LinearLayout[@resource-id='org.wikipedia:id/page_list_item_container']";
+
 
     public SearchPageObject(AppiumDriver driver){
         super(driver);
@@ -42,5 +50,31 @@ public class SearchPageObject extends MainPageObject{
     public void clickByArticleWithSubstring(String substring){
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementPresentAndClick(By.xpath(search_result_xpath), "Cannot find and click search result with substring " + substring, 15);
+    }
+    public int getAmountOfFoundArticles(){
+        this.waitForElementPresent(
+                By.xpath(SEARCH_RESULT_ELEMENT),
+                "Cannot find anything by the request",
+                15
+        );
+        return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
+    }
+    public void waitForEmptyResultLabel(){
+        this.waitForElementPresent(
+                By.id(EMPTY_RESULTS_LABEL),
+                "Cannot find empty result label by the request ",
+                15
+        );
+    }
+    public void asserThereIsNoResultOfSearch(){
+        this.assertElementNotPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
+    }
+    public void checkAllResultsOfSearchContains(String word) {
+        List titles = driver.findElementsByXPath(TITLE_OF_SEARCH_RESULT);
+        titles.stream().forEach(
+                (element) -> {
+                    WebElement title = (WebElement) element;
+                    Assert.assertTrue("At least one title does not contain '" + word + "'", title.getAttribute("text").contains(word));
+                });
     }
 }
