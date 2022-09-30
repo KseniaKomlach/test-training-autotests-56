@@ -2,22 +2,21 @@ package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import junit.framework.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class SearchPageObject extends MainPageObject{
+abstract public class SearchPageObject extends MainPageObject{
 
-    private static final String
-            SEARCH_INIT_ELEMENT = "xpath://*[@text='Search Wikipedia']",
-            SEARCH_INPUT = "id:org.wikipedia:id/search_src_text",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{SUBSTRING}\"]",
-            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text=\"{DESCRIPTION}\"]/preceding-sibling::*[@text=\"{TITLE}\"]",
-            EMPTY_RESULTS_LABEL = "id:org.wikipedia:id/search_empty_view",
-            TITLE_OF_SEARCH_RESULT = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_title']",
-            SEARCH_RESULT_ELEMENT = "xpath://android.widget.ListView[@resource-id='org.wikipedia:id/search_results_list']/android.widget.LinearLayout[@resource-id='org.wikipedia:id/page_list_item_container']";
+    protected static String
+            SEARCH_INIT_ELEMENT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULT_BY_TITLE_AND_DESCRIPTION_TPL,
+            EMPTY_RESULTS_LABEL,
+            TITLE_OF_SEARCH_RESULT,
+            SEARCH_RESULT_ELEMENT;
 
 
     public SearchPageObject(AppiumDriver driver){
