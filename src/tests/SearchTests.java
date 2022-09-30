@@ -1,7 +1,7 @@
 package src.tests;
 
-import org.junit.Test;
 import org.openqa.selenium.By;
+import org.testng.annotations.Test;
 import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MainPageObject;
