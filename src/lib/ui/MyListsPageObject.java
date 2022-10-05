@@ -2,6 +2,7 @@ package src.lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import src.lib.Platform;
 
 abstract public class MyListsPageObject extends MainPageObject{
 
@@ -27,10 +28,14 @@ abstract public class MyListsPageObject extends MainPageObject{
         );
     }
     public void swipeByArticleToDelete(String name_of_article){
+        String article_title = getArticleXpathByTitle(name_of_article);
         this.swipeElementToLeft(
-                "xpath://android.widget.TextView[@text='" + name_of_article + "']",
+                article_title,
                 "Cannot find and delete article"
         );
+        if (Platform.getInstance().isIOS()){
+                this.clickElementToTheRightUpperCorner();
+        }
     }
     public void waitForArticleToDisappearByTitle(String article_title){
         String article_xpath = getArticleXpathByTitle(article_title);

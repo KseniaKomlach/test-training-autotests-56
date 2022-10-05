@@ -10,6 +10,7 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import src.lib.Platform;
 
 import java.time.Duration;
 import java.util.List;
@@ -165,10 +166,23 @@ public class MainPageObject {
 
         TouchAction action = new TouchAction(driver);
         action
-                .press(PointOption.point(right_x, middle_y))
-                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(150)))
-                .moveTo(PointOption.point(left_x, middle_y))
-                .release().perform();
+                .press(PointOption.point(right_x, middle_y));
+                action.waitAction(WaitOptions.waitOptions(Duration.ofMillis(150)));
+                        if (Platform.getInstance().isAndroid()){
+                            action.moveTo(PointOption.point(left_x, middle_y));
+                        } else {
+                            int offset_x = (-1 * element.getSize().getWidth());
+                            action.moveTo(PointOption.point(offset_x,0));
+                        }
+                action.release();
+                action.perform();
+    }
+    public void clickElementToTheRightUpperCorner(){
+        this.waitForElementPresentAndClick(
+                "xpath://XCUIElementTypeButton[contains(@name,'swipe action delete')]",
+                "Cannot find recycle bin",
+                10
+        );
     }
     public int getAmountOfElements(String locator){
         By by =  this.getLocatorByString(locator);
