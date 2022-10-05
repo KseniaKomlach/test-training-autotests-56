@@ -2,12 +2,13 @@ package src.tests;
 
 import org.junit.Test;
 import src.lib.CoreTestCase;
+import src.lib.Platform;
 import src.lib.ui.WelcomePageObject;
 
 public class GetStartedTest extends CoreTestCase {
     @Test
     public void testPassThroughWelcome(){
-        if (this.Platform.isAndroid()){
+        if (Platform.getInstance().isAndroid()){
             return;
         }
         WelcomePageObject WelcomePage = new WelcomePageObject(driver);

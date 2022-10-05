@@ -4,11 +4,12 @@ import org.testng.annotations.Test;
 import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.SearchPageObject;
+import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class ChangeAppConditionTests extends CoreTestCase {
     @Test
     public void testCheckSearchArticleInBackground(){
-        SearchPageObject SearchPageObject =  new SearchPageObject(driver);
+        SearchPageObject SearchPageObject =  SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         String search_line = "Java";
@@ -19,7 +20,7 @@ public class ChangeAppConditionTests extends CoreTestCase {
     }
     @Test
     public void testChangeScreenOrientationOnSearchResults(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
 
         SearchPageObject.initSearchInput();

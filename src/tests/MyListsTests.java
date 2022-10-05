@@ -6,6 +6,7 @@ import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MyListsPageObject;
 import src.lib.ui.NavigationUI;
 import src.lib.ui.SearchPageObject;
+import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class MyListsTests extends CoreTestCase {
     @Test
@@ -15,7 +16,7 @@ public class MyListsTests extends CoreTestCase {
 
         String name_of_folder = "Folder";
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
         NavigationUI NavigationUI = new NavigationUI(driver);
         MyListsPageObject MyListPageObject = new MyListsPageObject(driver);
@@ -45,7 +46,7 @@ public class MyListsTests extends CoreTestCase {
 
         String name_of_folder = "Folder";
 
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         ArticlePageObject ArticlePageObject = new ArticlePageObject(driver);
         NavigationUI NavigationUI = new NavigationUI(driver);
         MyListsPageObject MyListPageObject = new MyListsPageObject(driver);

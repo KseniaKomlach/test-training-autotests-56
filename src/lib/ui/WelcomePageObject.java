@@ -10,7 +10,8 @@ public class WelcomePageObject extends MainPageObject{
         STEP_SEARCH_IN_OVER_300_LANGUAGES_TEXT = "id:Search in over 300 languages",
         STEP_LEARN_MORE_ABOUT_DATA_COLLECTED_TEXT = "xpath://*[@name='Learn more about data collected']",
         NEXT_LINK = "xpath://*[@name='Next']",
-        GET_STARTED_BUTTON = "xpath://*[@name='Get started']";
+        GET_STARTED_BUTTON = "xpath://*[@name='Get started']",
+        SKIP_LINK = "xpath://XCUIElementTypeStaticText[@name='Skip']";
 
 
 
@@ -35,5 +36,8 @@ public class WelcomePageObject extends MainPageObject{
     }
     public void clickGetStartedButton(){
         this.waitForElementPresentAndClick(GET_STARTED_BUTTON, "Cannot find 'Get started' button", 15);
+    }
+    public void clickSkip(){
+        this.waitForElementPresentAndClick(SKIP_LINK, "Cannot find and click skip welcome page link");
     }
 }

@@ -6,25 +6,25 @@ import src.lib.CoreTestCase;
 import src.lib.ui.ArticlePageObject;
 import src.lib.ui.MainPageObject;
 import src.lib.ui.SearchPageObject;
+import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class SearchTests extends CoreTestCase {
     //Ex3
     @Test
     public void testCancelSearch() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Kingdom");
-        SearchPageObject.waitForSearchResult("Wikimedia disambiguation page");
+        SearchPageObject.waitForSearchResult("Video game series");
         SearchPageObject.waitForCancelButtonToAppear();
-        SearchPageObject.clickCancelSearch();
         SearchPageObject.clickCancelSearch();
         SearchPageObject.waitForCancelButtonToDisappear();
     }
 
     @Test
     public void testAmountOfNotEmptySearch() {
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Linkin Park discography");
@@ -36,7 +36,7 @@ public class SearchTests extends CoreTestCase {
     }
     @Test
     public void testAmountOfEmptySearch(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("hjghkjgk");
@@ -45,22 +45,22 @@ public class SearchTests extends CoreTestCase {
     }
     @Test
     public void testCheckResultsOfSearch(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Kingdom");
-        SearchPageObject.waitForSearchResult("Wikimedia disambiguation page");
+        SearchPageObject.waitForSearchResult("Video game series");
         SearchPageObject.checkAllResultsOfSearchContains("Kingdom");
     }
-    //Ex9
+    //Ex12
     @Test
     public void testFind3ArticlesByTitleAndDescription(){
-        SearchPageObject SearchPageObject = new SearchPageObject(driver);
+        SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
 
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Kingdom");
-        SearchPageObject.waitForElementByTitleAndDescription("Kingdom", "Wikimedia disambiguation page");
-        SearchPageObject.waitForElementByTitleAndDescription("Kingdom of Great Britain", "Constitutional monarchy in Western Europe (1707–1800)");
         SearchPageObject.waitForElementByTitleAndDescription("Kingdom Hearts", "Video game series");
+        SearchPageObject.waitForElementByTitleAndDescription("Kingdom of Great Britain", "Constitutional monarchy in Western Europe (1707–1800)");
+        SearchPageObject.waitForElementByTitleAndDescription("Kingdom of Yugoslavia", "Country in southeastern Europe, 1918–1941");
     }
 }
