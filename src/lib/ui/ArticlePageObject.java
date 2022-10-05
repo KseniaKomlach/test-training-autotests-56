@@ -3,27 +3,28 @@ package src.lib.ui;
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import src.lib.Platform;
 
-public class ArticlePageObject extends MainPageObject{
+abstract public class ArticlePageObject extends MainPageObject{
 
-    private static final String
-            TITLE = "id:org.wikipedia:id/view_page_title_text",
-            MORE_OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            FOOTER_ELEMENT = "id:org.wikipedia:id/page_license_text",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_LIST_BUTTON = "xpath://android.widget.TextView[@text='Add to reading list']",
-            ADD_TO_NEW_LIST_OVERLAY = "id:org.wikipedia:id/onboarding_button",
-            LIST_NAME_INPUT = "id:org.wikipedia:id/text_input",
-            LIST_OK_BUTTON = "xpath://android.widget.Button[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
-            FOLDER_BY_NAME_TPL = "xpath://android.widget.TextView[@text=\"{FOLDER_NAME}\"]";
+    protected static String
+            TITLE,
+            MORE_OPTIONS_BUTTON,
+            FOOTER_ELEMENT,
+            OPTIONS_BUTTON,
+            OPTIONS_ADD_TO_LIST_BUTTON,
+            ADD_TO_NEW_LIST_OVERLAY,
+            LIST_NAME_INPUT,
+            LIST_OK_BUTTON,
+            CLOSE_ARTICLE_BUTTON,
+            FOLDER_BY_NAME_TPL;
 
     public ArticlePageObject(AppiumDriver driver){
         super(driver);
     }
 
     public WebElement waitForTitleElement(){
-        return this.waitForElementPresent(TITLE, "Cannot find article title on page");
+        return this.waitForElementPresent(TITLE, "Cannot find article title on page", 20);
     }
     private static String getFolderXpathByName(String name_of_folder){
         return FOLDER_BY_NAME_TPL.replace("{FOLDER_NAME}", name_of_folder);
@@ -33,7 +34,11 @@ public class ArticlePageObject extends MainPageObject{
         return title_element.getAttribute("text");
     }
     public void swipeToFooter(){
-        this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 20);
+        if (Platform.getInstance().isAndroid()){
+            this.swipeUpToFindElement(FOOTER_ELEMENT, "Cannot find the end of article", 20);
+        } else {
+            this.swipeUpTillElementAppear(FOOTER_ELEMENT, "Cannot find the end of article", 20);
+        }
     }
     public void swipeQuickToFooter(){
         this.swipeUpToFindElementQuick(FOOTER_ELEMENT, "Cannot find the end of article", 20);
@@ -86,7 +91,11 @@ public class ArticlePageObject extends MainPageObject{
     public void closeArticle(){
         this.waitForElementPresentAndClick(
                 CLOSE_ARTICLE_BUTTON,
-                "Cannot close article, cannot find X link"
+                "Cannot close article, cannot find X or back button",
+                15
         );
+    }
+    public void addArticleToMySaved(){
+        this.waitForElementPresentAndClick(OPTIONS_ADD_TO_LIST_BUTTON, "Cannot find button to add article to saved", 15);
     }
 }
