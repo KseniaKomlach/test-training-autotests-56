@@ -13,7 +13,7 @@ import src.lib.ui.factories.NavigationUIFactory;
 import src.lib.ui.factories.SearchPageObjectFactory;
 
 public class MyListsTests extends CoreTestCase {
-    @Test
+    //@Test
     public void testSaveFirstArticleToMyList() {
         String search_line = "Kingdom";
         String substring = "Video game series";
@@ -48,13 +48,13 @@ public class MyListsTests extends CoreTestCase {
         MyListPageObject.swipeByArticleToDelete(search_line);
         MyListPageObject.waitForArticleToDisappearByTitle(search_line);
     }
-    //@Test
+    @Test
     public void testSavingTwoArticles(){
         String search_line = "Kingdom";
         String substring = "Video game series";
 
         String search_line_second = "Elizabeth II";
-        String substring_second = "Queen of the United Kingdom from 1952 to 2022 (1926–2022)";
+        String substring_second = "Queen of the United Kingdom";
 
         String name_of_folder = "Folder";
 
@@ -68,8 +68,13 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring(substring);
 
         ArticlePageObject.waitForTitleElement();
-        String article_title = ArticlePageObject.getArticleTitle();
-        ArticlePageObject.addArticleToMyNewList(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()){
+            substring = ArticlePageObject.getArticleTitle();
+            ArticlePageObject.addArticleToMyNewList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
         ArticlePageObject.closeArticle();
 
         SearchPageObject.initSearchInput();
@@ -77,15 +82,24 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject.clickByArticleWithSubstring(substring_second);
 
         ArticlePageObject.waitForTitleElement();
-        String article_title_second = ArticlePageObject.getArticleTitle();
-        ArticlePageObject.addArticleToMyList(name_of_folder);
+
+        if (Platform.getInstance().isAndroid()){
+            substring_second = ArticlePageObject.getArticleTitle();
+            ArticlePageObject.addArticleToMyNewList(name_of_folder);
+        } else {
+            ArticlePageObject.addArticleToMySaved();
+        }
         ArticlePageObject.closeArticle();
 
         NavigationUI.clickMyLists();
 
-        MyListPageObject.openFolderByName(name_of_folder);
-        MyListPageObject.swipeByArticleToDelete(article_title);
-        MyListPageObject.waitForArticleToDisappearByTitle(article_title);
-        MyListPageObject.waitForArticleToAppearByTitle(article_title_second);
+        if (Platform.getInstance().isAndroid()){
+            MyListPageObject.openFolderByName(name_of_folder);
+        } else {
+            MyListPageObject.closePopUpWindow();
+        }
+        MyListPageObject.swipeByArticleToDelete(substring_second);
+        MyListPageObject.waitForArticleToDisappearByTitle(substring_second);
+        MyListPageObject.waitForArticleToAppearByTitle(substring);
     }
 }
